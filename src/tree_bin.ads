@@ -29,7 +29,7 @@ package Tree_Bin is
     -- pre-condition: 
     -- post-condition: none
     -- exception: none
-    procedure add_el(el: in T_Element, tree: in out T_Tree, left: in Boolean);
+    --procedure add_el(el: in T_Element, tree: in out T_Tree, left: in Boolean);
 
 private
     type T_Node;

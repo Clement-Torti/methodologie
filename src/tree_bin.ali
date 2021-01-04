@@ -11,13 +11,13 @@ RV NO_STANDARD_STORAGE_POOLS
 RV NO_DEFAULT_INITIALIZATION
 RV SPARK_05
 
-U tree_bin%b		tree_bin.adb		c6137026 NE OO PK GE
+U tree_bin%b		tree_bin.adb		a0303b14 NE OO PK GE
 W ada%s			ada.ads			ada.ali
 W ada.float_text_io%s	a-flteio.ads		a-flteio.ali
 W ada.integer_text_io%s	a-inteio.ads		a-inteio.ali
 W ada.text_io%s		a-textio.adb		a-textio.ali
 
-U tree_bin%s		tree_bin.ads		63830f08 BN EE NE OO PK GE IL
+U tree_bin%s		tree_bin.ads		984a0f42 BN EE NE OO PK GE IL
 
 D ada.ads		20170106103348 76789da1 ada%s
 D a-except.ads		20151016123252 291912d5 ada.exceptions%s
@@ -44,8 +44,8 @@ D s-stoele.ads		20140225151139 2dc34a04 system.storage_elements%s
 D s-traent.ads		20140730135025 005bf670 system.traceback_entries%s
 D s-unstyp.ads		20160502101423 34867c83 system.unsigned_types%s
 D s-wchcon.ads		20140718092328 1b7d22d2 system.wch_con%s
-D tree_bin.ads		20210104104018 63830f08 tree_bin%s
-D tree_bin.adb		20210104104121 8a3c44fe tree_bin%b
+D tree_bin.ads		20210104123637 984a0f42 tree_bin%s
+D tree_bin.adb		20210104123627 17d60f86 tree_bin%b
 X 1 ada.ads
 16K9*Ada 20e8 27|5r6 5r23 6r6 6r31 7r6 7r29
 X 3 a-flteio.ads
@@ -55,19 +55,19 @@ X 4 a-inteio.ads
 X 8 a-textio.ads
 49K13*Text_IO 471e16 27|5w10 5r27
 X 26 tree_bin.ads
-6+10 T_Element 7r29 21r13
+6+10 T_Element 7r29 20r28 40r13 27|10r28
 7U20 show 7>25
 7*25 el{6+10}
-8k9*Tree_Bin 6z10 7z20 16E10 27l5 27e13 27|9b14 16l5 16t13
-9P10*T_Tree 13r31 18c10 22r12 23r12 24r13 27|10r31 11r15
-10X5*EXISTING_KEY
-11X5*ABSENT_KEY
-13V14*init_tree{9P10} 27|10b14 14l9 14t18
-16R10 T_Node 18r27 20c10 25e15
-21*9 el{6+10}
-22p9 l{9P10}
-23p9 r{9P10}
-24p9 up{9P10}
+8k9*Tree_Bin 6z10 7z20 35E10 46l5 46e13 27|9b14 17l5 17t13
+9P10*T_Tree 20r46 37c10 41r12 42r12 43r13 27|10r46 11r15
+10X5*ABSENT_KEY
+20V14*init_tree{9P10} 20>24 27|10b14 15l9 15t18
+20*24 el{6+10} 27|10b24 13r20
+35R10 T_Node 37r27 39c10 44e15
+40*9 el{6+10} 27|13m14
+41p9 l{9P10}
+42p9 r{9P10}
+43p9 up{9P10}
 X 27 tree_bin.adb
-11p9 tree{26|9P10} 13r16
+11p9 tree{26|9P10} 13r9 14r16
 
