@@ -1,0 +1,20 @@
+— un résumé qui décrit l’objectif et le contenu du rapport (10 lignes maxi),
+— une introduction qui présente le problème traité et le plan du document
+— la présentation des principaux types de données et la justification des
+choix de ces structures
+3
+1ère année Apprentissage Informatique & Réseaux
+Méthodologie de la programmation
+— la présentation des principaux algorithmes définis
+— la présentation des raffinages ayant conduits aux algorithmes principaux. Vous vous attacherez à présenter les principales étapes de ces raffinages.
+Ces raffinages devront montrer comment les algorithmes précédents ont été obtenus
+— l’architecture de l’application en modules
+— la présentation des principaux choix réalisés
+— la démarche adoptée pour tester le programme
+— les difficultés rencontrées et les solutions adoptées en justifiant vos choix (en
+particulier quand vous avez envisagé plusieurs solutions)
+— un bilan technique donnant un état d’avancement du projet et les perspectives
+d’amélioration / évolution
+— un bilan personnel : intérêt, temps passé, temps passé à la conception, temps
+passé à l’implantation, temps passé à la mise au point, temps passé sur le rapport,
+enseignements tirés de ce projet, etc.
