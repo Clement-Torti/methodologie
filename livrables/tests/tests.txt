@@ -1,0 +1,7 @@
+# Menu tests
+
+- Menu is showing uppackage at launch
+- Invalid choice handle
+- Out of range choice handle
+
+#
