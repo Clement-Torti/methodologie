@@ -38,6 +38,17 @@ package body Tree_Bin is
     end tree_depth;
 
 ------
+    function tree_length(tree: in T_Tree) return Integer is
+    begin
+        -- stop criteria
+        if (tree = null) then
+            return 0;
+        end if;
+
+        return 1 + tree_length(tree.All.l) + tree_length(tree.All.r);
+    end tree_length;
+
+------
     function exist_el_tree(id: in Integer; tree: in T_Tree) return Boolean is
     begin
         return find_el_tree(id, tree) /= null;
@@ -125,6 +136,38 @@ package body Tree_Bin is
     end show_tree;
 
 ------
+    procedure show_ancestors(tree: in T_Tree; cur_gen: in Integer; generation: in Integer) is
+    begin
+        -- Stop criteria
+        if (tree = null) then
+            return;
+        end if;
+
+        if (cur_gen = generation or generation = -1) then
+            show(tree.All.el, false);
+        end if;
+        
+        show_ancestors(tree.All.l, cur_gen + 1, generation);
+        show_ancestors(tree.All.r, cur_gen + 1, generation);
+
+    end show_ancestors;
+
+------
+    procedure show_descendant(tree: in T_Tree; cur_desc: in Integer; descendant: in Integer) is
+    begin
+        -- Stop criteria
+        if (tree = null) then
+            return;
+        end if;
+
+        if (cur_desc = descendant or descendant = -1) then
+            show(tree.All.el, false);
+        end if;
+        
+        show_descendant(tree.All.up, cur_desc + 1, descendant);
+    end show_descendant;
+
+------
     procedure filter_tree(tree: in T_Tree; nb_parent: in Integer) is
         nb: Integer := 0;
     begin
@@ -153,9 +196,27 @@ package body Tree_Bin is
     end filter_tree;
 
 ------
-    procedure delete_tree(tree: in out T_Tree) is
+    procedure delete_tree(id: in Integer; tree: in out T_Tree) is
     begin
-        tree := null;
+        -- Stop criteria
+        if (tree = null) then
+            return;
+        end if;
+
+        -- If it's the root element
+        if (id_el(tree.All.el) = id) then
+            tree := null;
+            return;
+        end if;
+
+        delete_tree(id, tree.All.l);
+        delete_tree(id, tree.All.r);
     end delete_tree;
 
+------
+    procedure clear_tree(tree: in out T_Tree) is
+    begin
+        tree := null;
+    end;
+    
 end Tree_Bin;

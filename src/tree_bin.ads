@@ -42,6 +42,16 @@ package Tree_Bin is
     function tree_depth(tree: in T_Tree) return Integer;
 
     --------------------------------------------------------
+    -- function tree_length (recursive)
+    -- sémantique: give the length of a tree
+    -- parameters: tree: The tree to check
+    -- return type: Integer
+    -- pre-condition: none
+    -- post-condition: none
+    -- exception: none
+    function tree_length(tree: in T_Tree) return Integer;
+
+    --------------------------------------------------------
     -- function exist_el_tree 
     -- sémantique: indicate wether an element exist within a tree
     -- parameters: tree: The tree to check
@@ -78,11 +88,36 @@ package Tree_Bin is
     -- procedure show_tree (recursive)
     -- sémantique: show all the element of a tree
     -- parameters: tree: The tree to display
+    --              generation: always set to 0 at first use (used to indent content properly)
     -- return type: X
     -- pre-condition: none
     -- post-condition: none
     -- exception: none
     procedure show_tree(tree: in T_Tree; generation: in Integer);
+
+    --------------------------------------------------------
+    -- procedure show_ancestors (recursive)
+    -- sémantique: show all the ancestors at a given level
+    -- parameters: tree: The tree to display
+    --              cur_gen: Used to keep track of the current generation
+    --              generation: to gen level to show
+    -- return type: X
+    -- pre-condition: none
+    -- post-condition: none
+    -- exception: none
+    procedure show_ancestors(tree: in T_Tree; cur_gen: in Integer; generation: in Integer);
+
+    --------------------------------------------------------
+    -- procedure show_descendant
+    -- sémantique: show all the ancestors at a given level
+    -- parameters: tree: The tree to display
+    --              cur_desc: Used to keep track of the current generation
+    --              descendant: to gen level to show
+    -- return type: X
+    -- pre-condition: none
+    -- post-condition: none
+    -- exception: none
+    procedure show_descendant(tree: in T_Tree; cur_desc: in Integer; descendant: in Integer);
 
     --------------------------------------------------------
     -- procedure filter_tree (recursive)
@@ -98,12 +133,23 @@ package Tree_Bin is
     --------------------------------------------------------
     -- procedure delete_tree
     -- sémantique: delete the tree element
-    -- parameters: root: The root of the tree
+    -- parameters: tree: The root of the tree
+    --              id : the element id to delete
     -- return type: X
     -- pre-condition: none
     -- post-condition: none
     -- exception: none
-    procedure delete_tree(tree: in out T_Tree);
+    procedure delete_tree(id: in Integer; tree: in out T_Tree);
+
+    --------------------------------------------------------
+    -- procedure clear_tree
+    -- sémantique: clear the all tree
+    -- parameters: tree: The root of the tree
+    -- return type: none
+    -- pre-condition: none
+    -- post-condition: none
+    -- exception: none
+    procedure clear_tree(tree: in out T_Tree);
                                                                 
 private
     type T_Node;
