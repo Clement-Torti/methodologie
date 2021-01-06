@@ -239,7 +239,6 @@ package body Tree_Bin is
             To_String(formatted_el(tree.All.el, ancestor_id)) & 
             LF &
             To_String(traverse_tree(tree.All.l, id_el(tree.All.el))) & 
-            LF &  
             To_String(traverse_tree(tree.All.r, id_el(tree.All.el)))
             );
     end traverse_tree;

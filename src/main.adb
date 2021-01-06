@@ -12,20 +12,12 @@ with console; use console;
 with p_list_gen;
 with gen_saver; use gen_saver;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
-
+with gen_loader; use gen_loader;
 
 PROCEDURE main IS 
     -- Tree_Bin configuration
     package Tree_Genealog is new Tree_Bin(T_Element=> T_Person, show=> show_person, id_el=>id_person);
     use Tree_Genealog;
-
-    function formatted_el_save(el: in T_Person; ancestor: in Integer) return Unbounded_String is
-    begin
-        return save_person(el, ancestor);
-    end formatted_el_save;
-
-    function traverse_tree is new Tree_Genealog.traverse_tree(
-formatted_el=> formatted_el_save);
 
     -- Provide a basic tree for tests
     function stub_tree_1 return T_Tree is
@@ -135,6 +127,16 @@ formatted_el=> formatted_el_save);
 
     end filter_trees;
 
+
+    -- Saver configuration
+    function formatted_el_save(el: in T_Person; ancestor: in Integer) return Unbounded_String is
+    begin
+        return save_person(el, ancestor);
+    end formatted_el_save;
+
+    function traverse_tree is new Tree_Genealog.traverse_tree(
+formatted_el=> formatted_el_save);
+
     function save_trees(trees: in Ptr_Cellule; file_name: in Unbounded_String) return Boolean is
         index: Integer := 0;
         cur_el: Ptr_Cellule;
@@ -157,6 +159,49 @@ formatted_el=> formatted_el_save);
 
         return save_tree(trees_str, file_name);
     end save_trees;
+
+
+
+
+    function load_trees(file_name: in Unbounded_String) return Ptr_Cellule is
+        My_File  : FILE_TYPE;
+        line: Unbounded_String;
+        trees: Ptr_Cellule;
+        person: T_Person;
+        tree: T_Tree;
+        subTree: T_Tree;
+        id: Integer;
+    begin
+        -- create empty tree
+        trees := creer_liste_vide;
+        
+        -- open the file
+        open(My_File, In_File, To_String(file_name) & ".txt");
+        
+        -- loop over it
+        loop
+            exit when End_Of_File(My_File);
+            line := To_Unbounded_String(Get_Line(My_File));
+
+            -- decrypt the line
+            if (To_String(line) = "arbres") then
+                -- This is the first element of the tree
+                line := To_Unbounded_String(Get_Line(My_File));
+                person := person_from_line(line, id, true);
+                tree := init_tree(person);
+                inserer_en_tete(tree, trees);
+            else
+                person := person_from_line(line, id, false);
+                subTree := find_el_trees(id, trees);
+                add_el_tree(person, subTree);
+            end if;
+        end loop;
+
+        -- close the file
+        close(My_File);
+        
+        return trees;
+    end;
 
     trees: Ptr_Cellule;
     tree: T_Tree;
@@ -313,6 +358,11 @@ BEGIN
                 else
                     Put_Line("impossible to save file");
                 end if;
+
+            when 15 => -- Load from file
+                file_name := choose_file_name;
+                trees := load_trees(file_name);
+                afficher_liste(trees);
 
             when 16 => -- Show persons list
                 afficher_liste(trees);
