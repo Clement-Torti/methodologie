@@ -41,5 +41,5 @@ package Person is
     -- pre-condition: none
     -- post-condition: none
     -- exception: none
-    function id(el: in T_Person) return Integer;
+    function id_person(el: in T_Person) return Integer;
 end Person;

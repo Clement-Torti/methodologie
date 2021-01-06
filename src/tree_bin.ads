@@ -88,12 +88,12 @@ package Tree_Bin is
     -- procedure show_tree (recursive)
     -- sémantique: show all the element of a tree
     -- parameters: tree: The tree to display
-    --              generation: always set to 0 at first use (used to indent content properly)
+    --              cur_gen: always set to 0 at first use (used to indent content properly)
     -- return type: X
     -- pre-condition: none
     -- post-condition: none
     -- exception: none
-    procedure show_tree(tree: in T_Tree; generation: in Integer);
+    procedure show_tree(tree: in T_Tree; cur_gen: in Integer);
 
     --------------------------------------------------------
     -- procedure show_ancestors (recursive)
@@ -150,6 +150,16 @@ package Tree_Bin is
     -- post-condition: none
     -- exception: none
     procedure clear_tree(tree: in out T_Tree);
+
+    --------------------------------------------------------
+    -- function root_tree
+    -- sémantique: give the root element of the tree
+    -- parameters: tree
+    -- return type: T_Element The root element
+    -- pre-condition: Non empty tree
+    -- post-condition: none
+    -- exception: none
+    function root_tree(tree: in T_Tree) return T_Element with Pre=> not empty_tree(tree);
                                                                 
 private
     type T_Node;

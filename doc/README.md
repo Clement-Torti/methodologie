@@ -33,4 +33,9 @@ le noeud 15 et ses ancêtres, on supprime les nœuds 14 et 5.
 
 # consignes
 
-
+A faire:
+-multiple tree
+-persistance
+-non random id
+-tests
+-doc

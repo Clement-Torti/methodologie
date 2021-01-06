@@ -61,8 +61,8 @@ package body Person is
     end create_person;
 
 ------
-    function id(el: in T_Person) return Integer is
+    function id_person(el: in T_Person) return Integer is
     begin
         return el.id;
-    end id;
+    end id_person;
 end Person;
