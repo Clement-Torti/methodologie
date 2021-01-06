@@ -6,6 +6,8 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Integer_Text_IO; use Ada.Integer_Text_IO;
 with Ada.Float_Text_IO; use Ada.Float_Text_IO;
 with utils; use utils;
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+
 
 package body Tree_Bin is
 ------
@@ -104,7 +106,7 @@ package body Tree_Bin is
     end add_el_tree;
 
 ------
-    procedure show_tree(tree: in T_Tree; cur_gen: in Integer) is
+    procedure show_tree(tree: in T_Tree; cur_gen: in Integer := 0) is
         depth: Integer;
     begin
         -- Stop criteria
@@ -136,7 +138,7 @@ package body Tree_Bin is
     end show_tree;
 
 ------
-    procedure show_ancestors(tree: in T_Tree; cur_gen: in Integer; generation: in Integer) is
+    procedure show_ancestors(tree: in T_Tree; generation: in Integer; cur_gen: in Integer := 0) is
     begin
         -- Stop criteria
         if (tree = null) then
@@ -147,13 +149,13 @@ package body Tree_Bin is
             show(tree.All.el, false);
         end if;
         
-        show_ancestors(tree.All.l, cur_gen + 1, generation);
-        show_ancestors(tree.All.r, cur_gen + 1, generation);
+        show_ancestors(tree.All.l, generation, cur_gen + 1);
+        show_ancestors(tree.All.r, generation, cur_gen + 1);
 
     end show_ancestors;
 
 ------
-    procedure show_descendant(tree: in T_Tree; cur_desc: in Integer; descendant: in Integer) is
+    procedure show_descendant(tree: in T_Tree; descendant: in Integer; cur_desc: in Integer := 0) is
     begin
         -- Stop criteria
         if (tree = null) then
@@ -164,7 +166,7 @@ package body Tree_Bin is
             show(tree.All.el, false);
         end if;
         
-        show_descendant(tree.All.up, cur_desc + 1, descendant);
+        show_descendant(tree.All.up, descendant, cur_desc + 1);
     end show_descendant;
 
 ------
@@ -224,5 +226,22 @@ package body Tree_Bin is
     begin
         return tree.All.el;
     end root_tree;
-    
+
+------
+    function  traverse_tree(tree: in T_Tree; ancestor_id: in Integer := -1) return Unbounded_String is
+    begin
+        if (tree = null) then
+            return To_Unbounded_String("");
+        end if;
+
+
+        return To_Unbounded_String(
+            To_String(formatted_el(tree.All.el, ancestor_id)) & 
+            LF &
+            To_String(traverse_tree(tree.All.l, id_el(tree.All.el))) & 
+            LF &  
+            To_String(traverse_tree(tree.All.r, id_el(tree.All.el)))
+            );
+    end traverse_tree;
+
 end Tree_Bin;

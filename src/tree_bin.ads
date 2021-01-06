@@ -1,6 +1,8 @@
 --
 -- Generic module specification implementing a binary Tree
 --
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+
 
 generic
     type T_Element is private;
@@ -93,7 +95,7 @@ package Tree_Bin is
     -- pre-condition: none
     -- post-condition: none
     -- exception: none
-    procedure show_tree(tree: in T_Tree; cur_gen: in Integer);
+    procedure show_tree(tree: in T_Tree; cur_gen: in Integer := 0);
 
     --------------------------------------------------------
     -- procedure show_ancestors (recursive)
@@ -105,7 +107,7 @@ package Tree_Bin is
     -- pre-condition: none
     -- post-condition: none
     -- exception: none
-    procedure show_ancestors(tree: in T_Tree; cur_gen: in Integer; generation: in Integer);
+    procedure show_ancestors(tree: in T_Tree; generation: in Integer; cur_gen: in Integer := 0);
 
     --------------------------------------------------------
     -- procedure show_descendant
@@ -117,7 +119,7 @@ package Tree_Bin is
     -- pre-condition: none
     -- post-condition: none
     -- exception: none
-    procedure show_descendant(tree: in T_Tree; cur_desc: in Integer; descendant: in Integer);
+    procedure show_descendant(tree: in T_Tree; descendant: in Integer; cur_desc: in Integer := 0);
 
     --------------------------------------------------------
     -- procedure filter_tree (recursive)
@@ -160,6 +162,10 @@ package Tree_Bin is
     -- post-condition: none
     -- exception: none
     function root_tree(tree: in T_Tree) return T_Element with Pre=> not empty_tree(tree);
+
+    generic
+        with function formatted_el(el: in T_Element; ancestor: in Integer) return Unbounded_String;
+    function traverse_tree(tree: in T_Tree; ancestor_id: in Integer := -1) return Unbounded_String;
                                                                 
 private
     type T_Node;

@@ -10,12 +10,22 @@ with person; use person;
 with tree_Bin;
 with console; use console;
 with p_list_gen;
+with gen_saver; use gen_saver;
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 
 
 PROCEDURE main IS 
     -- Tree_Bin configuration
     package Tree_Genealog is new Tree_Bin(T_Element=> T_Person, show=> show_person, id_el=>id_person);
     use Tree_Genealog;
+
+    function formatted_el_save(el: in T_Person; ancestor: in Integer) return Unbounded_String is
+    begin
+        return save_person(el, ancestor);
+    end formatted_el_save;
+
+    function traverse_tree is new Tree_Genealog.traverse_tree(
+formatted_el=> formatted_el_save);
 
     -- Provide a basic tree for tests
     function stub_tree_1 return T_Tree is
@@ -28,6 +38,9 @@ PROCEDURE main IS
         pers1.name := To_Unbounded_String("clement");
         pers1.surname := To_Unbounded_String("torti");
         pers1.gender := true;
+
+        Put_Line(To_String(save_person(pers1, -1)));
+        Put_Line(To_String(save_person(pers1, 10)));
 
         pers2.id := 2;
         pers2.name := To_Unbounded_String("sylvie");
@@ -58,12 +71,12 @@ PROCEDURE main IS
         return id_person(rootLeft) = id_person(rootRight); 
     end equal_tree;
 
-    procedure show_tree(el: T_Tree) is
+    procedure show_t(el: T_Tree) is
     begin
-        show_tree(el, 0);
-    end show_tree;
+        show_tree(el);
+    end show_t;
 
-    package List_Tree is new p_list_gen(T_Element=> T_Tree, equal=>equal_tree, afficher_el=> show_tree);
+    package List_Tree is new p_list_gen(T_Element=> T_Tree, equal=>equal_tree, afficher_el=> show_t);
     use List_Tree;
 
     --------------------------------------------------------
@@ -122,6 +135,29 @@ PROCEDURE main IS
 
     end filter_trees;
 
+    function save_trees(trees: in Ptr_Cellule; file_name: in Unbounded_String) return Boolean is
+        index: Integer := 0;
+        cur_el: Ptr_Cellule;
+        trees_str: Unbounded_String;
+    begin
+        cur_el := element_liste(index, trees);
+        -- go throught each tree
+        while (not est_vide(cur_el)) loop
+            trees_str := To_Unbounded_String(
+                To_String(trees_str) & 
+                "arbres" &
+                 LF & 
+                 To_String(traverse_tree(root_liste(cur_el)))
+                 );
+
+
+            index := index + 1;
+            cur_el := element_liste(index, trees);
+        end loop;
+
+        return save_tree(trees_str, file_name);
+    end save_trees;
+
     trees: Ptr_Cellule;
     tree: T_Tree;
     subTree: T_Tree;
@@ -131,6 +167,7 @@ PROCEDURE main IS
     id: Integer;
     length: Integer;
     gen: Integer;
+    file_name: Unbounded_String;
 BEGIN
     trees := creer_liste_vide;
 
@@ -148,13 +185,14 @@ BEGIN
 
         -- Deal with the choice
         case choice is
-            when 1 => 
+            when 1 => -- Create tree
                 pers := create_person;
                 tree := init_tree(pers);
                 inserer_en_tete(tree, trees);
                 
                 Put_Line("Tree created.");
-            when 2 =>
+
+            when 2 => -- Add parent
                 id := choose_id_console;
 
                 -- This person exist ?
@@ -168,7 +206,7 @@ BEGIN
                     add_el_tree(pers, subTree);
                 end if;
             
-            when 3 =>
+            when 3 => -- Get number of ancestor
                 id := choose_id_console;
                 subTree := find_el_trees(id, trees);
 
@@ -179,7 +217,7 @@ BEGIN
                     Put_Line(Integer'Image(id) & " has " & Integer'Image(length) & " ancestor(s).");
                 end if;
             
-            when 4 =>
+            when 4 => -- Get ancestor at a certain level
                 id := choose_id_console;
                 subTree := find_el_trees(id, trees);
 
@@ -187,19 +225,20 @@ BEGIN
                     Put("Abort (Unknown id)");
                 else
                     gen := choose_gen_console;
-                    show_ancestors(subTree, 0, gen);
+                    show_ancestors(subTree, gen);
                 end if;
 
-            when 5 =>
+            when 5 => -- Show person tree
                 id := choose_id_console;
                 subTree := find_el_trees(id, trees);
 
                 if (empty_tree(subTree)) then
                     Put("Abort (Unknown id)");
                 else
-                    show_tree(subTree, 0);
+                    show_tree(subTree);
                 end if;
-            when 6 =>
+
+            when 6 => -- Delete person (and his ancestor)
                 id := choose_id_console;
 
                 -- This person exist ?
@@ -216,21 +255,25 @@ BEGIN
                     end if;
                     
                 end if;
-            when 7 => filter_trees(trees, 1);
-            when 8 => filter_trees(trees, 2);
-            when 9 => filter_trees(trees, 0);
 
-            when 10 =>
+            when 7 => -- One parent list
+                filter_trees(trees, 1);
+            when 8 => -- 2 parent list
+                filter_trees(trees, 2);
+            when 9 =>  -- 0 parent list
+                filter_trees(trees, 0);
+
+            when 10 => -- Get all ancestor of someone
                 id := choose_id_console;
                 subTree := find_el_trees(id, trees);
                 
                 if (empty_tree(subTree)) then
                     Put("Abort (Unknown id)");
                 else
-                    show_ancestors(subTree, 0, -1);
+                    show_ancestors(subTree, -1);
                 end if;
             
-            when 11 =>
+            when 11 => -- Get descendant at a certain level
                 id := choose_id_console;
                 subTree := find_el_trees(id, trees);
 
@@ -238,20 +281,20 @@ BEGIN
                     Put("Abort (Unknown id)");
                 else
                     gen := choose_gen_console;
-                    show_descendant(subTree, 0, gen);
+                    show_descendant(subTree, gen);
                 end if;
 
-            when 12 =>
+            when 12 => -- Get all descendants of someone
                 id := choose_id_console;
                 subTree := find_el_trees(id, trees);
                 
                 if (empty_tree(subTree)) then
                     Put("Abort (Unknown id)");
                 else
-                    show_descendant(subTree, 0, -1);
+                    show_descendant(subTree, -1);
                 end if;
-            
-            when 13 =>
+        
+            when 13 => -- Clear all info
                 Put("Are you sure you want to erase everything (y, n)?");
                 Get(temp);
 
@@ -262,7 +305,18 @@ BEGIN
                     Put_Line("Erased canceled");
                 end if;
 
-            when 16 => afficher_liste(trees);
+            when 14 => -- Save in file
+                file_name := choose_file_name;
+                
+                if (save_trees(trees, file_name)) then
+                    Put_Line("file saved");
+                else
+                    Put_Line("impossible to save file");
+                end if;
+
+            when 16 => -- Show persons list
+                afficher_liste(trees);
+
             when others => Put_Line("Unknown option");
         end case;
 

@@ -1,6 +1,8 @@
 --
 -- Module containing the user interface functions/procedures
 --
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+
 
 package console is
     NBOPTION: Integer := 16;
@@ -45,6 +47,16 @@ package console is
     -- post-condition: none
     -- exception: BAD_CHOICE DATA_ERROR
     function choose_gen_console return Integer;
+
+    --------------------------------------------------------
+    -- procedure choose_file_name
+    -- sémantique: provide a uniform way of choosing where to save a gen tree
+    -- parameters: none
+    -- return type: Unbounded_String: The file name
+    -- pre-condition: none
+    -- post-condition: none
+    -- exception: none
+    function choose_file_name return Unbounded_String;
 
 
 end console;

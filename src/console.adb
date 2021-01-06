@@ -86,4 +86,13 @@ package body console is
         when DATA_ERROR => skip_line; return choose_gen_console;
     end choose_gen_console;
 
+------
+    function choose_file_name return Unbounded_String is
+    begin
+        Put_Line("Enter the name of the file (without extension): ");
+        skip_line;
+        return To_Unbounded_String(Get_Line);
+    end choose_file_name;
+
+
 end console;
