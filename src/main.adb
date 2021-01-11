@@ -13,6 +13,7 @@ with console; use console;
 with p_list_gen;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 
+
 PROCEDURE main IS 
     --------------------------------------------------------
     -- TREE CONFIGURATION
@@ -129,6 +130,7 @@ PROCEDURE main IS
         return subTree;
     end find_el_trees;
 
+
     --------------------------------------------------------
     -- procedure filter_trees
     -- sémantique: apply the filter_tree methods (see tree_bin.adb) to a list of trees
@@ -155,6 +157,7 @@ PROCEDURE main IS
 
     end filter_trees;
 
+
     --------------------------------------------------------
     -- SAVER CONFIGURATION
     --
@@ -162,6 +165,7 @@ PROCEDURE main IS
     -- A method to go throught every element of one tree
     function stringify_tree is new Tree_Genealog.stringify_tree(
 stringify_el=> stringify_person);
+
 
     --------------------------------------------------------
     -- procedure save_trees
@@ -185,9 +189,9 @@ stringify_el=> stringify_person);
             trees_str := To_Unbounded_String(
                 To_String(trees_str) & 
                 "arbres" &
-                 LF &
-                 To_String(stringify_tree(root_liste(cur_el)))
-                 );
+                LF &
+                To_String(stringify_tree(root_liste(cur_el)))
+                );
 
             index := index + 1;
             cur_el := element_liste(index, trees);

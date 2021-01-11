@@ -88,10 +88,17 @@ package body console is
 
 ------
     function choose_file_name return Unbounded_String is
+        str: Unbounded_String;
     begin
         Put_Line("Enter the name of the file (without extension): ");
-        skip_line;
-        return To_Unbounded_String(Get_Line);
+        --skip_line;
+        str := To_Unbounded_String(Get_Line);
+
+        if (To_String(str) = "") then
+            return choose_file_name;
+        end if;
+
+        return str;
     end choose_file_name;
 
 
