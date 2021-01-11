@@ -260,6 +260,7 @@ stringify_el=> stringify_person);
 
     exception
         when NAME_ERROR => Put_Line(To_String(file_name) & ".txt doesn't exist"); return trees;
+        when BAD_PERSON_FORMAT => Put_Line("file corrupted"); return trees;
     end;
 
     trees: Ptr_Cellule;
