@@ -1,6 +1,7 @@
 --
 -- Utils function and procedure used throughout the programm
 --
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package Utils is
     --------------------------------------------------------

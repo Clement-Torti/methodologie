@@ -163,9 +163,20 @@ package Tree_Bin is
     -- exception: none
     function root_tree(tree: in T_Tree) return T_Element with Pre=> not empty_tree(tree);
 
+    --------------------------------------------------------
+    -- function stringify_tree (recursive)
+    -- sémantique: provide a string out of a tree
+    -- parameters: tree: the tree to stringify
+    --          generic stringify_el: a way to stringify the element
+    --              el: the element to stringify
+    --              ancestor_id: the id of the ancestor of the element
+    -- return type: Unbounded_String
+    -- pre-condition: Non empty tree
+    -- post-condition: none
+    -- exception: none
     generic
-        with function formatted_el(el: in T_Element; ancestor: in Integer) return Unbounded_String;
-    function traverse_tree(tree: in T_Tree; ancestor_id: in Integer := -1) return Unbounded_String;
+        with function stringify_el(el: in T_Element; ancestor_id: in Integer) return Unbounded_String;
+    function stringify_tree(tree: in T_Tree; ancestor_id: in Integer := -1) return Unbounded_String;
                                                                 
 private
     type T_Node;

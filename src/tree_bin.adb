@@ -228,7 +228,7 @@ package body Tree_Bin is
     end root_tree;
 
 ------
-    function  traverse_tree(tree: in T_Tree; ancestor_id: in Integer := -1) return Unbounded_String is
+    function  stringify_tree(tree: in T_Tree; ancestor_id: in Integer := -1) return Unbounded_String is
     begin
         if (tree = null) then
             return To_Unbounded_String("");
@@ -236,11 +236,11 @@ package body Tree_Bin is
 
 
         return To_Unbounded_String(
-            To_String(formatted_el(tree.All.el, ancestor_id)) & 
+            To_String(stringify_el(tree.All.el, ancestor_id)) & 
             LF &
-            To_String(traverse_tree(tree.All.l, id_el(tree.All.el))) & 
-            To_String(traverse_tree(tree.All.r, id_el(tree.All.el)))
+            To_String(stringify_tree(tree.All.l, id_el(tree.All.el))) & 
+            To_String(stringify_tree(tree.All.r, id_el(tree.All.el)))
             );
-    end traverse_tree;
+    end stringify_tree;
 
 end Tree_Bin;

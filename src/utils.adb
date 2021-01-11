@@ -23,5 +23,5 @@ package body Utils is
             return b;
         end if;
     end;
-    
+
 end Utils;

@@ -6,33 +6,34 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Integer_Text_IO; use Ada.Integer_Text_IO;
 with Ada.Float_Text_IO; use Ada.Float_Text_IO;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with person; use person;
 with tree_Bin;
 with console; use console;
 with p_list_gen;
-with gen_saver; use gen_saver;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
-with gen_loader; use gen_loader;
 
 PROCEDURE main IS 
-    -- Tree_Bin configuration
+    --------------------------------------------------------
+    -- TREE CONFIGURATION
+    --
     package Tree_Genealog is new Tree_Bin(T_Element=> T_Person, show=> show_person, id_el=>id_person);
     use Tree_Genealog;
 
-    -- Provide a basic tree for tests
+    --------------------------------------------------------
+    --STUB DATA FOR TREE
+    --
     function stub_tree_1 return T_Tree is
         tree: T_Tree;
         pers1: T_Person;
         pers2: T_Person;
         pers3: T_Person;
     begin
+        -- create persons
         pers1.id := 1;
         pers1.name := To_Unbounded_String("clement");
         pers1.surname := To_Unbounded_String("torti");
         pers1.gender := true;
-
-        Put_Line(To_String(save_person(pers1, -1)));
-        Put_Line(To_String(save_person(pers1, 10)));
 
         pers2.id := 2;
         pers2.name := To_Unbounded_String("sylvie");
@@ -44,15 +45,29 @@ PROCEDURE main IS
         pers3.surname := To_Unbounded_String("torti");
         pers3.gender := false;
 
+        -- create the tree
         tree := init_tree(pers1);
 
+        -- add the persons to the tree
         add_el_tree(pers2, tree);
         add_el_tree(pers3, tree);
 
         return tree;
     end stub_tree_1;
 
-    -- Chained list configuration (to keep track of multiple tree)
+
+    --------------------------------------------------------
+    -- CHAINED LIST OF TREE CONFIGURATION
+    --
+
+    --------------------------------------------------------
+    -- fonction equal_tree
+    -- sémantique: return true if the trees are equals (aka, if they have the same root)
+    -- parameters: g,d: trees to compare
+    -- return type: Boolean
+    -- pre-condition: none
+    -- post-condition: none
+    -- exception: none
     function equal_tree(g,d: in T_Tree) return Boolean is
         rootLeft: T_Person;
         rootRight: T_Person;
@@ -74,7 +89,8 @@ PROCEDURE main IS
     --------------------------------------------------------
     -- procedure find_el_trees
     -- sémantique: Find an tree element inside a list of trees
-    -- parameters: eid: id of the element to find
+    -- parameters: id: id of the element to find
+    --              root: if tree, return the root of the tree containing the element. If false return the subtree.
     --              trees: the list of trees to search in
     -- return type: T_Tree
     -- pre-condition: none
@@ -83,86 +99,125 @@ PROCEDURE main IS
     function find_el_trees(id: in Integer; trees: in Ptr_Cellule; root: in Boolean := false) return T_Tree is
         cur_el: Ptr_Cellule;
         subTree: T_Tree;
-        list: Ptr_Cellule;
         index: Integer := 0;
     begin
-        -- Go trought each tree
+        -- go trought each tree
         cur_el := element_liste(index, trees);
         while (not est_vide(cur_el)) loop
             index := index + 1;
 
-            -- Try to find the element inside it
+            -- try to find the element inside it
             subTree := find_el_tree(id, root_liste(cur_el));
             if (not empty_tree(subTree)) then
+
                 -- return the tree containing the element
                 if (root) then
                     return root_liste(cur_el);
+
                 -- return the element itself
                 else
                     return subTree;
                 end if;
                 
-                
             end if;
 
-            -- Next tree
+            -- next tree of the list
             cur_el := element_liste(index, trees);
         end loop;
 
-        -- No subtree found
+        -- no subtree found
         return subTree;
     end find_el_trees;
 
+    --------------------------------------------------------
+    -- procedure filter_trees
+    -- sémantique: apply the filter_tree methods (see tree_bin.adb) to a list of trees
+    -- parameters: trees: the list of trees
+    --              nb_parent: the number of parent an element should have to be displayed
+    -- return type: none
+    -- pre-condition: none
+    -- post-condition: none
     procedure filter_trees(trees: in Ptr_Cellule; nb_parent: in Integer) is
         index: Integer := 0;
         cur_el: Ptr_Cellule;
     begin
+        -- go throught each tree
         cur_el := element_liste(index, trees);
         while (not est_vide(cur_el)) loop
+
+            -- call the filter tree on that tree
             filter_tree(root_liste(cur_el), nb_parent);
 
+            -- get next tree
             index := index + 1;
             cur_el := element_liste(index, trees);
         end loop;
 
     end filter_trees;
 
+    --------------------------------------------------------
+    -- SAVER CONFIGURATION
+    --
 
-    -- Saver configuration
-    function formatted_el_save(el: in T_Person; ancestor: in Integer) return Unbounded_String is
-    begin
-        return save_person(el, ancestor);
-    end formatted_el_save;
+    -- A method to go throught every element of one tree
+    function stringify_tree is new Tree_Genealog.stringify_tree(
+stringify_el=> stringify_person);
 
-    function traverse_tree is new Tree_Genealog.traverse_tree(
-formatted_el=> formatted_el_save);
-
+    --------------------------------------------------------
+    -- procedure save_trees
+    -- sémantique: save trees inside a file 
+    -- parameters: trees: the list of trees
+    --              file_name: the name of the file containing trees
+    -- return type: Boolean indicating success
+    -- pre-condition: none
+    -- post-condition: none
     function save_trees(trees: in Ptr_Cellule; file_name: in Unbounded_String) return Boolean is
         index: Integer := 0;
         cur_el: Ptr_Cellule;
         trees_str: Unbounded_String;
+        F : File_Type;
     begin
-        cur_el := element_liste(index, trees);
         -- go throught each tree
+        cur_el := element_liste(index, trees);
         while (not est_vide(cur_el)) loop
+
+            -- get a string out of a tree
             trees_str := To_Unbounded_String(
                 To_String(trees_str) & 
                 "arbres" &
-                 LF & 
-                 To_String(traverse_tree(root_liste(cur_el)))
+                 LF &
+                 To_String(stringify_tree(root_liste(cur_el)))
                  );
-
 
             index := index + 1;
             cur_el := element_liste(index, trees);
         end loop;
 
-        return save_tree(trees_str, file_name);
+        -- save the file
+        -- Open a stream into the file
+        Create (F, Out_File, To_String(file_name) & ".txt");
+
+        -- Write the string in it
+        Put_Line (F, To_String(trees_str));
+
+        -- Close the file
+        Close (F);
+
+        return true;
     end save_trees;
 
 
+    --------------------------------------------------------
+    -- LOADER CONFIGURATION
+    --
 
-
+    --------------------------------------------------------
+    -- procedure load_trees
+    -- sémantique: load trees from a .txt file
+    -- parameters:  file_name: the name of the file containing trees
+    -- return type: Ptr_Cellule (null if unsuccessfull)
+    -- pre-condition: none
+    -- post-condition: none
     function load_trees(file_name: in Unbounded_String) return Ptr_Cellule is
         My_File  : FILE_TYPE;
         line: Unbounded_String;
@@ -181,6 +236,7 @@ formatted_el=> formatted_el_save);
         -- loop over it
         loop
             exit when End_Of_File(My_File);
+            -- get the next line
             line := To_Unbounded_String(Get_Line(My_File));
 
             -- decrypt the line
@@ -201,6 +257,9 @@ formatted_el=> formatted_el_save);
         close(My_File);
         
         return trees;
+
+    exception
+        when NAME_ERROR => Put_Line(To_String(file_name) & ".txt doesn't exist"); return trees;
     end;
 
     trees: Ptr_Cellule;
