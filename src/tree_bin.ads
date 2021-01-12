@@ -95,7 +95,8 @@ package Tree_Bin is
     -- pre-condition: none
     -- post-condition: none
     -- exception: none
-    procedure show_tree(tree: in T_Tree; cur_gen: in Integer := 0);
+    procedure show_tree(tree: in T_Tree; cur_gen: in Integer);
+    procedure show_tree(tree: in T_Tree);
 
     --------------------------------------------------------
     -- procedure show_ancestors (recursive)
@@ -177,7 +178,19 @@ package Tree_Bin is
     generic
         with function stringify_el(el: in T_Element; ancestor_id: in Integer) return Unbounded_String;
     function stringify_tree(tree: in T_Tree; ancestor_id: in Integer := -1) return Unbounded_String;
-                                                                
+
+
+
+    --------------------------------------------------------
+    -- fonction equal_tree
+    -- sémantique: return true if the trees are equals (aka, if they have the same root)
+    -- parameters: g,d: trees to compare
+    -- return type: Boolean
+    -- pre-condition: none
+    -- post-condition: none
+    -- exception: none
+    function equal_tree(g,d: in T_Tree) return Boolean;
+
 private
     type T_Node;
 

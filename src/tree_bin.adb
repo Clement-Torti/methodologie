@@ -106,7 +106,7 @@ package body Tree_Bin is
     end add_el_tree;
 
 ------
-    procedure show_tree(tree: in T_Tree; cur_gen: in Integer := 0) is
+    procedure show_tree(tree: in T_Tree; cur_gen: in Integer) is
         depth: Integer;
     begin
         -- Stop criteria
@@ -135,6 +135,12 @@ package body Tree_Bin is
 
         show_tree(tree.All.l, cur_gen + 1);
         show_tree(tree.All.r, cur_gen + 1);
+    end show_tree;
+
+------
+    procedure show_tree(tree: in T_Tree) is
+    begin
+        show_tree(tree, 0);
     end show_tree;
 
 ------
@@ -243,4 +249,14 @@ package body Tree_Bin is
             );
     end stringify_tree;
 
+------
+    function equal_tree(g,d: in T_Tree) return Boolean is
+        rootLeft: T_Element;
+        rootRight: T_Element;
+    begin
+        rootLeft := root_tree(g);
+        rootRight := root_tree(d);
+
+        return id_el(rootLeft) = id_el(rootRight); 
+    end equal_tree;
 end Tree_Bin;
