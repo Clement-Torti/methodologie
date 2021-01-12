@@ -15,6 +15,7 @@ package body console is
         Put_Line("Choose an option:");
         
         -- must have options
+        Put_Line("  0. Quit program");
         Put_Line("  1. Create tree");
         Put_Line("  2. Add parent");
         Put_Line("  3. Get number of ancestor");
@@ -44,7 +45,7 @@ package body console is
         Put("What's your choice ?: ");
         Get(choice);
 
-        if (choice <= 0 or choice > NBOPTION) then
+        if (choice < 0 or choice > NBOPTION) then
             raise BAD_CHOICE;
         end if;
 

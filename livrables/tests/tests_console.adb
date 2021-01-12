@@ -11,7 +11,7 @@ begin
     -- choose_option_console
     Put_Line("insert: 'd', then: '-2', then '1");
     option := choose_option_console;
-    assert(option > 0 and option < 17, "FAIL: error in choose_option_console -> invalid option returned");
+    assert(option >= 0 and option < 17, "FAIL: error in choose_option_console -> invalid option returned");
     Put_Line("-> choose_option_console: success");
 
     -- choose_id_console
