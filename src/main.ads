@@ -22,10 +22,11 @@ PACKAGE main IS
     --------------------------------------------------------
     -- procedure user_program
     -- sémantique: program interacting with the user to let him manipulate gen trees
-    -- parameters:  none
+    -- parameters:  trees (for testing purposes)
     -- return type: none
     -- pre-condition: none
     -- post-condition: none
+    procedure user_program(trees: in out Ptr_Cellule);
     procedure user_program;
 
 END main;

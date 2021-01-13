@@ -254,6 +254,14 @@ package body Tree_Bin is
         rootLeft: T_Element;
         rootRight: T_Element;
     begin
+        if (empty_tree(g) /= empty_tree(d)) then
+            return false;
+        end if;
+
+        if (empty_tree(g)) then
+            return true;
+        end if;
+
         rootLeft := root_tree(g);
         rootRight := root_tree(d);
 

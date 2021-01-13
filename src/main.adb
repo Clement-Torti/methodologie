@@ -2,7 +2,7 @@
 -- Main program launch at app's start
 --
 
-PACKAGE BODY main IS
+package body main is
     --------------------------------------------------------
     --STUB DATA FOR TREE
     --
@@ -14,18 +14,18 @@ PACKAGE BODY main IS
     begin
         -- create persons
         pers1.id := 1;
-        pers1.name := To_Unbounded_String("clement");
-        pers1.surname := To_Unbounded_String("torti");
+        pers1.name := To_Unbounded_String("henri");
+        pers1.surname := To_Unbounded_String("dupont");
         pers1.gender := true;
 
         pers2.id := 2;
-        pers2.name := To_Unbounded_String("sylvie");
-        pers2.surname := To_Unbounded_String("torti");
+        pers2.name := To_Unbounded_String("sandrine");
+        pers2.surname := To_Unbounded_String("marchant");
         pers2.gender := true;
 
         pers3.id := 3;
-        pers3.name := To_Unbounded_String("serge");
-        pers3.surname := To_Unbounded_String("torti");
+        pers3.name := To_Unbounded_String("herve");
+        pers3.surname := To_Unbounded_String("dupont");
         pers3.gender := false;
 
         -- create the tree
@@ -39,8 +39,7 @@ PACKAGE BODY main IS
     end stub_tree_1;
 
 ------
-    PROCEDURE user_program IS 
-        trees: Ptr_Cellule;
+    procedure user_program(trees: in out Ptr_Cellule) is
         tree: T_Tree;
         subTree: T_Tree;
         pers: T_Person;
@@ -50,12 +49,8 @@ PACKAGE BODY main IS
         length: Integer;
         gen: Integer;
         file_name: Unbounded_String;
-    BEGIN
-        trees := creer_liste_vide;
-
-        -- Stub data for testing 
-        tree := stub_tree_1;
-        inserer_en_tete(tree, trees);
+    begin
+        --trees := creer_liste_vide;
 
         -- General process of the application
         while (true) loop
@@ -214,6 +209,13 @@ PACKAGE BODY main IS
             Get(temp);
             New_Line;
         end loop;
-    END user_program;
+    end user_program;
 
-END main;
+------
+    procedure user_program is 
+        trees: Ptr_Cellule;
+    begin
+        user_program(trees);
+    end user_program;
+
+end main;
